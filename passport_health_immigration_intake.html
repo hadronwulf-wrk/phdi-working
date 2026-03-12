@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Passport Health — Immigration Intake Flow</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f3;color:#1a1a1a}
+.wrap{max-width:600px;margin:0 auto;padding:1.5rem 1rem}
+.ph-logo{color:#30B2EE;font-size:18px;font-weight:600;letter-spacing:-0.3px;margin-bottom:1rem}
+.ph-logo span{color:#1a1a1a;font-weight:400}
+.nav{display:flex;gap:1.5rem;border-bottom:1.5px solid #30B2EE;margin-bottom:1.5rem;padding-bottom:0.5rem;font-size:13px;flex-wrap:wrap}
+.nav span{color:#888;cursor:default}
+.nav span.active{color:#1a1a1a;font-weight:500}
+.progress{display:flex;align-items:center;gap:4px;margin-bottom:1.5rem;flex-wrap:wrap;row-gap:8px}
+.step-dot{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;flex-shrink:0}
+.step-dot.done{background:#30B2EE}
+.step-dot.done::after{content:'';display:block;width:8px;height:8px;border-radius:50%;background:white}
+.step-dot.current{background:white;border:2px solid #30B2EE}
+.step-dot.pending{background:white;border:1.5px solid #ccc}
+.step-label{font-size:12px;color:#888;flex-shrink:0}
+.step-bar{height:2px;background:#e0e0e0;flex:1;min-width:8px}
+.step-bar.done{background:#30B2EE}
+.section-title{font-size:13px;font-weight:500;letter-spacing:0.5px;color:#1a1a1a;margin-bottom:1.25rem;text-transform:uppercase}
+.field{margin-bottom:1rem}
+.field label{display:block;font-size:13px;color:#666;margin-bottom:4px}
+.field input[type=text],
+.field input[type=email],
+.field input[type=tel],
+.field input[type=date],
+.field select,
+.field textarea{
+  width:100%;padding:8px 10px;
+  border:0.5px solid #ccc;
+  border-radius:8px;
+  font-size:14px;
+  background:#fff;
+  color:#1a1a1a;
+  font-family:inherit;
+  outline:none;
+}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:#30B2EE;box-shadow:0 0 0 2px rgba(48,178,238,0.15)}
+.field textarea{resize:vertical;min-height:72px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.radio-row{display:flex;gap:1.5rem;margin-top:4px;align-items:center}
+.radio-row label{display:flex;align-items:center;gap:6px;font-size:14px;cursor:pointer;color:#1a1a1a}
+.radio-row input{accent-color:#30B2EE;width:16px;height:16px}
+.check-group{display:flex;flex-direction:column;gap:0}
+.check-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-bottom:0.5px solid #e8e8e8;font-size:14px;cursor:pointer;color:#1a1a1a}
+.check-item:first-child{border-top:0.5px solid #e8e8e8}
+.check-item input{accent-color:#30B2EE;width:15px;height:15px;flex-shrink:0}
+.section-divider{height:0.5px;background:#e8e8e8;margin:1.5rem 0}
+.table-section{width:100%;border-collapse:collapse;margin-bottom:1rem;font-size:13px}
+.table-section th{text-align:left;padding:8px 10px;background:#f5f5f3;font-weight:500;font-size:12px;color:#888;border:0.5px solid #e0e0e0}
+.table-section td{padding:8px 10px;border:0.5px solid #e0e0e0;vertical-align:top;color:#1a1a1a}
+.table-section td:nth-child(2),.table-section td:nth-child(3){width:52px;text-align:center}
+.table-section td:nth-child(2) input,.table-section td:nth-child(3) input{accent-color:#30B2EE}
+.table-section .group-row td{background:#f5f5f3;font-weight:500;font-size:12px;color:#888;padding:6px 10px;letter-spacing:0.3px;text-transform:uppercase}
+.desc-input{width:100%;border:none;border-bottom:0.5px solid #ccc;background:transparent;font-size:12px;color:#1a1a1a;font-family:inherit;outline:none;padding:2px 0}
+.add-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;background:#30B2EE;color:white;font-size:13px;font-weight:500;border:none;cursor:pointer;margin-top:8px}
+.add-btn:hover{background:#1a9fd4}
+.btn-next{width:100%;padding:12px;background:#30B2EE;color:white;font-size:15px;font-weight:500;border:none;border-radius:6px;cursor:pointer;margin-top:1.5rem}
+.btn-next:hover{background:#1a9fd4}
+.btn-back{width:100%;padding:11px;background:#f0f0ee;color:#888;font-size:15px;font-weight:400;border:0.5px solid #ddd;border-radius:6px;cursor:pointer;margin-top:8px}
+.btn-back:hover{background:#e8e8e6}
+.required{color:#E85D3F;margin-left:1px}
+.field-note{font-size:12px;color:#888;margin-top:4px}
+.imm-badge{display:inline-block;background:#E1F5EE;color:#0F6E56;font-size:11px;font-weight:500;padding:2px 8px;border-radius:10px;margin-left:8px;vertical-align:middle}
+.consent-box{background:#f5f5f3;border:0.5px solid #ddd;border-radius:8px;padding:1rem;font-size:13px;color:#555;line-height:1.6;height:200px;overflow-y:auto;margin-bottom:1rem}
+.sig-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.finish-msg{text-align:center;padding:2rem 1rem}
+.finish-msg .check-circle{width:56px;height:56px;border-radius:50%;background:#E1F5EE;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem}
+.vaccine-row{border:0.5px solid #e8e8e8;border-radius:8px;padding:12px;margin-bottom:8px}
+.med-row{border:0.5px solid #e8e8e8;border-radius:8px;padding:12px;margin-bottom:8px}
+.inline-input{width:100%;padding:8px 10px;border:0.5px solid #ccc;border-radius:8px;font-size:14px;background:#fff;color:#1a1a1a;font-family:inherit;outline:none;margin-bottom:6px}
+.inline-input:focus{border-color:#30B2EE;box-shadow:0 0 0 2px rgba(48,178,238,0.15)}
+.consent-check-row{border:0.5px solid #ddd;border-radius:8px;padding:12px;gap:10px;display:flex;cursor:pointer;align-items:flex-start;margin-bottom:1rem}
+.consent-check-row input{accent-color:#30B2EE;width:16px;height:16px;flex-shrink:0;margin-top:2px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="ph-logo">Passport<span>Health</span></div>
+  <div class="nav">
+    <span class="active" id="navLabel">Medical History</span>
+    <span>Medical Records</span>
+    <span>Invoices</span>
+    <span>Travel Itineraries</span>
+    <span>Appointments</span>
+    <span>More</span>
+  </div>
+  <div class="progress" id="progressBar"></div>
+  <div id="formContent"></div>
+</div>
+
+<script>
+const STEPS = [
+  {key:'personal',   label:'Personal Info'},
+  {key:'medical',    label:'Medical History'},
+  {key:'communicable', label:'Communicable Diseases'},
+  {key:'mental',     label:'Mental & Substance'},
+  {key:'concerns',   label:'Other Concerns'},
+  {key:'allergies',  label:'Allergies'},
+  {key:'vaccines',   label:'Vaccine History'},
+  {key:'medications',label:'Medications'},
+  {key:'consent',    label:'Acknowledgement'},
+];
+
+let current = 0;
+
+function renderProgress() {
+  const pb = document.getElementById('progressBar');
+  pb.innerHTML = '';
+  STEPS.forEach((s, i) => {
+    if (i > 0) {
+      const bar = document.createElement('div');
+      bar.className = 'step-bar' + (i <= current ? ' done' : '');
+      pb.appendChild(bar);
+    }
+    const dot = document.createElement('div');
+    dot.className = 'step-dot ' + (i < current ? 'done' : i === current ? 'current' : 'pending');
+    pb.appendChild(dot);
+    if (i === current) {
+      const lbl = document.createElement('span');
+      lbl.className = 'step-label';
+      lbl.textContent = s.label;
+      pb.appendChild(lbl);
+    }
+  });
+}
+
+function field(label, type, opts = {}) {
+  const req = opts.required ? `<span class="required">*</span>` : '';
+  const imm = opts.imm ? `<span class="imm-badge">immigration</span>` : '';
+  const note = opts.note ? `<div class="field-note">${opts.note}</div>` : '';
+  let input = '';
+  const uid = Math.random().toString(36).slice(2, 8);
+  if (['text','email','tel','date'].includes(type)) {
+    input = `<input type="${type}" placeholder="${opts.placeholder || ''}">`;
+  } else if (type === 'select') {
+    input = `<select><option value="">Select option</option>${(opts.options||[]).map(o=>`<option>${o}</option>`).join('')}</select>`;
+  } else if (type === 'textarea') {
+    input = `<textarea placeholder="${opts.placeholder || ''}"></textarea>`;
+  } else if (type === 'radio') {
+    const options = opts.options || ['Yes','No'];
+    input = `<div class="radio-row">${options.map(o=>`<label><input type="radio" name="rg_${uid}"> ${o}</label>`).join('')}</div>`;
+  }
+  return `<div class="field${opts.cls?' '+opts.cls:''}"><label>${label}${req}${imm}</label>${input}${note}</div>`;
+}
+
+function checkList(items) {
+  return `<div class="check-group">${items.map(item => {
+    const label = item.label || item;
+    const imm = item.imm ? `<span class="imm-badge">immigration</span>` : '';
+    return `<label class="check-item"><input type="checkbox"> <span>${label}${imm}</span></label>`;
+  }).join('')}</div>`;
+}
+
+function tableYesNo(groups) {
+  let rows = '';
+  groups.forEach(g => {
+    rows += `<tr class="group-row"><td colspan="4">${g.group}</td></tr>`;
+    g.items.forEach(item => {
+      const uid = Math.random().toString(36).slice(2, 8);
+      rows += `<tr>
+        <td>${item}</td>
+        <td><input type="radio" name="yn_${uid}"></td>
+        <td><input type="radio" name="yn_${uid}"></td>
+        <td><input class="desc-input" type="text" placeholder="If yes, describe..."></td>
+      </tr>`;
+    });
+  });
+  return `<table class="table-section">
+    <thead><tr>
+      <th style="width:50%">Question</th>
+      <th>Yes</th><th>No</th>
+      <th>Description / Date</th>
+    </tr></thead>
+    <tbody>${rows}</tbody>
+  </table>`;
+}
+
+function navBtns(showBack, nextLabel) {
+  const back = showBack ? `<button class="btn-back" onclick="go(-1)">Back</button>` : '';
+  return `<button class="btn-next" onclick="go(1)">${nextLabel || 'Next'}</button>${back}`;
+}
+
+const stateList = ['AK','AL','AR','AZ','CA','CO','CT','DC','DE','FL','GA','HI','IA','ID','IL','IN','KS','KY','LA','MA','MD','ME','MI','MN','MO','MS','MT','NC','ND','NE','NH','NJ','NM','NV','NY','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VA','VT','WA','WI','WV','WY'];
+const vaccineList = ['COVID-19','Flu (Influenza)','Hepatitis A','Hepatitis B','HPV','MMR','Meningococcal','Pneumococcal','Polio','Shingles (Zoster)','Td/Tdap','Typhoid','Varicella (Chickenpox)','Yellow Fever','Other'];
+
+const pages = {
+
+personal: () => `
+  <div class="section-title">Personal Information</div>
+  ${field('Full Name','text',{required:true,placeholder:'First and Last Name'})}
+  <div class="row2">
+    ${field('Date of Birth','date',{required:true})}
+    ${field('Age','text',{required:true})}
+  </div>
+  ${field('Email Address','email',{required:true})}
+  <div class="row2">
+    ${field('Cell Phone','tel',{required:true})}
+    ${field('Home Phone','tel')}
+  </div>
+  ${field('Work Phone','tel')}
+  ${field('Address','text',{required:true})}
+  ${field('Address (cont.)','text')}
+  <div class="row3">
+    ${field('City','text',{required:true})}
+    ${field('State','select',{required:true,options:stateList})}
+    ${field('Postal Code','text',{required:true})}
+  </div>
+  <div class="row2">
+    ${field('Weight (lbs)','text',{required:true})}
+    ${field('Gender','select',{required:true,options:['Female','Male','Non-binary','Prefer not to say']})}
+  </div>
+  <div class="row2">
+    ${field('Ethnicity','select',{required:true,options:['Hispanic or Latino','Not Hispanic or Latino']})}
+    ${field('Race','select',{required:true,options:['American Indian/Alaska Native','Asian','Black/African American','Native Hawaiian/Pacific Islander','White','Two or more races','Unknown']})}
+  </div>
+  <div class="section-divider"></div>
+  <div class="section-title">ID &amp; Immigration Info <span class="imm-badge">immigration</span></div>
+  ${field('Passport / Driver\'s License / EAD / State ID #','text',{required:true,placeholder:'Document number'})}
+  ${field('Date of appointment with Civil Surgeon','date',{required:true})}
+  <div class="section-divider"></div>
+  <div class="section-title">Emergency Contact</div>
+  ${field('Emergency Contact Name','text',{required:true})}
+  ${field('Relationship','text')}
+  ${field('Emergency Contact Phone','tel',{required:true})}
+  <div class="section-divider"></div>
+  <div class="section-title">RX Information</div>
+  ${field('Do you have a preferred pharmacy?','radio')}
+  ${field('Have you been to a Passport Health clinic before?','radio')}
+  ${field('Were you referred by your employer?','radio',{required:true})}
+  ${navBtns(false,'Next')}
+`,
+
+medical: () => `
+  <div class="section-title">Medical History</div>
+  <p style="font-size:13px;color:#666;margin-bottom:1rem">Select the conditions for which you have been treated</p>
+  ${checkList([
+    {label:'Thyroid Disease'},
+    {label:'Cancer (if yes, specify type below)'},
+    {label:'Atherosclerosis / High Cholesterol'},
+    {label:'HIV/AIDS'},
+    {label:'Psychiatric Conditions'},
+    {label:'Thymus Removal'},
+  ])}
+  <div class="section-divider"></div>
+  <p style="font-size:13px;color:#666;margin-bottom:1rem">Select any additional conditions for which you are being treated</p>
+  ${checkList([
+    {label:'Acid Reflux'},
+    {label:'Anxiety / Depression'},
+    {label:'Asthma or shortness of breath'},
+    {label:'Arthritis or rheumatoid arthritis'},
+    {label:'Autoimmune Disorder', imm:true},
+    {label:'Diabetes'},
+    {label:'Epilepsy or seizure disorder'},
+    {label:'Gastrointestinal disease'},
+    {label:'Heart disease / Cardiac arrhythmia or irregularity'},
+    {label:'Heart Failure', imm:true},
+    {label:'Hepatitis'},
+    {label:'High blood pressure / Hypertension'},
+    {label:'Kidney disease'},
+    {label:'Liver disease'},
+    {label:'Migraines / headaches'},
+    {label:'Neurological conditions / Head injuries', imm:true},
+    {label:'Rheumatoid arthritis'},
+    {label:'Tuberculosis'},
+    {label:'Eczema, psoriasis, or other chronic dermatitis'},
+    {label:'Chickenpox (varicella)', imm:true},
+    {label:'Guillain-Barré syndrome or paralysis history'},
+    {label:'Other'},
+  ])}
+  <div class="section-divider"></div>
+  <div class="section-title">Females Only</div>
+  ${field('Last menstrual period','date',{imm:true})}
+  ${field('Are you pregnant or breastfeeding?','radio',{imm:true})}
+  ${field('Planning to become pregnant in next 3 months?','radio',{imm:true})}
+  <div class="section-divider"></div>
+  <div class="section-title">Medical &amp; Surgical History <span class="imm-badge">immigration</span></div>
+  <div class="field">
+    <label>Currently being treated for other conditions?</label>
+    <input class="inline-input" type="text" placeholder="Condition 1">
+    <input class="inline-input" type="text" placeholder="Condition 2">
+    <input class="inline-input" type="text" placeholder="Condition 3" style="margin-bottom:0">
+  </div>
+  <div class="field">
+    <label>Significant medical events, hospitalizations, or surgeries</label>
+    <input class="inline-input" type="text" placeholder="Event 1">
+    <input class="inline-input" type="text" placeholder="Event 2">
+    <input class="inline-input" type="text" placeholder="Event 3" style="margin-bottom:0">
+  </div>
+  ${navBtns(true,'Next')}
+`,
+
+communicable: () => `
+  <div class="section-title">Communicable Diseases <span class="imm-badge">immigration</span></div>
+  <p style="font-size:13px;color:#666;margin-bottom:1rem">Answer yes or no. If yes, describe including date occurred.</p>
+  ${tableYesNo([
+    {group:'Tuberculosis Symptoms Assessment', items:[
+      'Do you have Tuberculosis?',
+      'Ever been diagnosed or treated for Tuberculosis?',
+      'Any recent contact with someone with Tuberculosis?',
+      'Productive cough for 3 weeks or more, or coughing up blood?',
+      'Night sweats?',
+      'Loss of appetite or unexplained weight loss?',
+    ]},
+    {group:'Syphilis &amp; Gonorrhea Assessment', items:[
+      'Ever diagnosed or treated for Syphilis?',
+      'Sexual partner (now or past) diagnosed with Syphilis?',
+      'Ever diagnosed or treated for Gonorrhea?',
+      'Pain when urinating?',
+      'Unusual penile or vaginal discharge?',
+      'Genital / anal blisters or sores?',
+      'Painless sores in mouth or rash on the body?',
+      'Pelvic pain/discomfort?',
+    ]},
+    {group:'"Leprosy" or Hansen\'s Disease Assessment', items:[
+      'Have you or a family member ever had Leprosy/Hansen\'s Disease?',
+      'Unusual skin rashes or sores?',
+      'Swelling in your legs, groin or underarms?',
+      'Skin issues unresponsive to treatment?',
+    ]},
+  ])}
+  ${navBtns(true,'Next')}
+`,
+
+mental: () => `
+  <div class="section-title">Physical or Mental Disorders <span class="imm-badge">immigration</span></div>
+  <p style="font-size:13px;color:#666;margin-bottom:1rem">Do you have a history of the following?</p>
+  ${tableYesNo([
+    {group:'Mental Health History', items:[
+      'Depression or anxiety?',
+      'Other psychiatric or mental disorders?',
+      'Suicide attempts?',
+      'Thoughts or actions of hurting others, now or in the past?',
+      'Thoughts or actions of hurting yourself, now or in the past?',
+    ]},
+  ])}
+  <div class="section-divider"></div>
+  <div class="section-title">Substance Addiction / Abuse <span class="imm-badge">immigration</span></div>
+  ${tableYesNo([
+    {group:'Substance Use History', items:[
+      'Drug addiction or abuse?',
+      'Alcohol addiction or abuse?',
+      'If yes above, are you in full remission?',
+      'Using narcotic or habit-forming drugs?',
+      'Driving under the influence of drugs or alcohol (DUI)?',
+      'Any other police charges associated with alcohol or drug use?',
+      'Smoking or vaping?',
+    ]},
+  ])}
+  ${navBtns(true,'Next')}
+`,
+
+concerns: () => `
+  <div class="section-title">Other Medical Concerns</div>
+  ${checkList([
+    {label:'Have you ever had a positive TB skin test?'},
+    {label:'Do you have heart problems or cardiac arrhythmia or irregularity?'},
+    {label:'Do you have bleeding problems, take anticoagulants, aspirin or aspirin therapy?'},
+    {label:'Are you currently experiencing any respiratory infections or other acute illness?'},
+    {label:'Do you experience nightmares or insomnia?'},
+    {label:'Do you have stomach/bowel conditions such as frequent diarrhea or constipation?'},
+    {label:'Have you been diagnosed with sleep apnea?'},
+    {label:'Are you receiving steroid medications such as cortisone or prednisone?'},
+    {label:'Do you have a previous history of tendonitis/tendon rupture?'},
+    {label:'Are you receiving radiation or other treatments?'},
+    {label:'Do you have a history of fainting with shots?'},
+    {label:'Do you have any history of motion sickness?'},
+    {label:'Are you caring for anyone who is immunocompromised?'},
+  ])}
+  ${navBtns(true,'Next')}
+`,
+
+allergies: () => `
+  <div class="section-title">Allergies</div>
+  <p style="font-size:13px;color:#666;margin-bottom:1rem">Are you allergic to:</p>
+  ${checkList(['Gelatin','Eggs','Feathers','Formaldehyde','Insect/Bee stings','Latex','Mercury','Quinine','Thimerosal','Yeast','Other'])}
+  <div class="section-divider"></div>
+  ${field('Do you have any known drug allergies?','radio',{required:true})}
+  <div class="field">
+    <label>List drug allergies <span class="imm-badge">immigration</span></label>
+    <input class="inline-input" type="text" placeholder="Allergy 1">
+    <input class="inline-input" type="text" placeholder="Allergy 2">
+    <input class="inline-input" type="text" placeholder="Allergy 3" style="margin-bottom:0">
+  </div>
+  ${field('Have you ever had a reaction to an immunization in the past?','radio',{required:true})}
+  ${navBtns(true,'Next')}
+`,
+
+vaccines: () => `
+  <div class="section-title">Vaccine History</div>
+  <p style="font-size:13px;color:#666;margin-bottom:4px">Which vaccines have you received in the past? List all doses and bring records to your appointment.</p>
+  <p style="font-size:13px;color:#666;margin-bottom:1rem">If the month of administration is unknown, please use January.</p>
+  <div id="vaccineList">
+    <div class="vaccine-row">
+      <div class="row2">
+        <div class="field" style="margin:0">
+          <label>Vaccine</label>
+          <select><option value="">Select vaccine</option>${vaccineList.map(v=>`<option>${v}</option>`).join('')}</select>
+        </div>
+        <div class="field" style="margin:0">
+          <label>Date received</label>
+          <input type="date">
+        </div>
+      </div>
+    </div>
+  </div>
+  <button class="add-btn" onclick="addVaccine()">+ Add Vaccine</button>
+  <div class="section-divider"></div>
+  ${field('During the past 3 months, have you received a blood or plasma transfusion, been given Immune Globulin, or received Flumist, MMR, Yellow Fever, Varivax, or IXCHIQ (Chikungunya)?','radio',{required:true})}
+  ${field('Have you ever had chickenpox?','radio',{required:true})}
+  ${navBtns(true,'Next')}
+`,
+
+medications: () => `
+  <div class="section-title">Current Medications</div>
+  <p style="font-size:13px;color:#666;margin-bottom:1rem">List all current prescriptions, over-the-counter medications, and nutritional supplements</p>
+  <div id="medList">
+    <div class="med-row">
+      <div class="field" style="margin-bottom:8px"><label>Medication</label><input type="text" placeholder="Search medication"></div>
+      <div class="row2">
+        <div class="field" style="margin:0"><label>Dose</label><input type="text"></div>
+        <div class="field" style="margin:0"><label>Frequency</label><input type="text"></div>
+      </div>
+    </div>
+  </div>
+  <button class="add-btn" onclick="addMed()">+ Add Medication</button>
+  <div class="section-divider"></div>
+  <div class="field">
+    <label>Any additional information to add? <span class="imm-badge">immigration</span></label>
+    <textarea placeholder="Additional notes or health information..."></textarea>
+  </div>
+  ${navBtns(true,'Next')}
+`,
+
+consent: () => `
+  <div class="section-title">Client Acknowledgement</div>
+  <div class="consent-box">
+    <p style="margin-bottom:0.75rem">The above information is accurate and complete, to my best recollection. Any additional information I have provided, including but not limited to medical history, family history and personal information on other forms pertaining to my visit is also accurate and complete to my best recollection.</p>
+    <p style="margin-bottom:0.75rem">I understand that Passport Health is not a Medicare provider and Passport Health does no insurance billing or filing of forms. I understand that insurance may not cover the services I have received as a part of my appointment. I am responsible for all applicable office visit, immunization, laboratory, physical and diagnostic fees associated with this visit.</p>
+    <p style="margin-bottom:0.75rem">I understand that my appointment will include a screening conducted by a Passport Health clinician. This screening is not intended and should not be used, to replace periodic, thorough health and medical evaluation by and communication with a primary care physician.</p>
+    <p style="font-weight:500;margin-bottom:0.75rem">I attest all the above information is true and complete to my best knowledge. I understand if I knowingly withhold information, this may result in denial or revocation of any immigration benefit.</p>
+  </div>
+  <label class="consent-check-row">
+    <input type="checkbox">
+    <span style="font-size:14px;color:#1a1a1a">By checking this box, I acknowledge and agree to the foregoing and consent to the use of electronic signatures. <span class="required">*</span></span>
+  </label>
+  <div class="section-divider"></div>
+  <p style="font-size:13px;color:#666;margin-bottom:8px">Patient Signature (or Parent / Guardian if patient is a minor)</p>
+  <div class="sig-row">
+    ${field('First Name','text',{required:true})}
+    ${field('Last Name','text',{required:true})}
+  </div>
+  <div class="section-divider"></div>
+  <div class="section-title">Consent to Release Records</div>
+  ${field('I authorize Passport Health to release my protected health information (PHI).','radio',{required:true})}
+  ${field('Self-Consent','radio',{required:true})}
+  ${field('Consent Signature','text')}
+  ${field('Do you want to release records to another entity?','radio',{required:true})}
+  <button class="btn-next" onclick="finish()">Save and Finish</button>
+  <button class="btn-back" onclick="go(-1)">Back</button>
+`,
+};
+
+function render() {
+  renderProgress();
+  document.getElementById('formContent').innerHTML = pages[STEPS[current].key]();
+  window.scrollTo(0, 0);
+}
+
+function go(dir) {
+  current = Math.min(Math.max(current + dir, 0), STEPS.length - 1);
+  render();
+}
+
+function finish() {
+  document.getElementById('progressBar').innerHTML = '';
+  document.getElementById('formContent').innerHTML = `
+    <div class="finish-msg">
+      <div class="check-circle">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+          <path d="M5 13l4 4L19 7" stroke="#0F6E56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <p style="font-size:17px;font-weight:500;margin-bottom:0.5rem">Intake complete</p>
+      <p style="font-size:14px;color:#666">Your health history has been submitted. Please bring your vaccine records to your appointment.</p>
+    </div>
+  `;
+}
+
+function addVaccine() {
+  const list = document.getElementById('vaccineList');
+  const div = document.createElement('div');
+  div.className = 'vaccine-row';
+  div.innerHTML = `
+    <div class="row2">
+      <div class="field" style="margin:0">
+        <label>Vaccine</label>
+        <select><option value="">Select vaccine</option>${vaccineList.map(v=>`<option>${v}</option>`).join('')}</select>
+      </div>
+      <div class="field" style="margin:0">
+        <label>Date received</label>
+        <input type="date">
+      </div>
+    </div>`;
+  list.appendChild(div);
+}
+
+function addMed() {
+  const list = document.getElementById('medList');
+  const div = document.createElement('div');
+  div.className = 'med-row';
+  div.innerHTML = `
+    <div class="field" style="margin-bottom:8px"><label>Medication</label><input type="text" placeholder="Search medication"></div>
+    <div class="row2">
+      <div class="field" style="margin:0"><label>Dose</label><input type="text"></div>
+      <div class="field" style="margin:0"><label>Frequency</label><input type="text"></div>
+    </div>`;
+  list.appendChild(div);
+}
+
+render();
+</script>
+</body>
+</html>
