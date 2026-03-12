@@ -41,24 +41,28 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   outline:none;
 }
 .field input:focus,.field select:focus,.field textarea:focus{border-color:#30B2EE;box-shadow:0 0 0 2px rgba(48,178,238,0.15)}
-.field textarea{resize:vertical;min-height:72px}
+.field textarea{resize:vertical;min-height:60px}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
-.radio-row{display:flex;gap:1.5rem;margin-top:4px;align-items:center}
+.radio-row{display:flex;gap:1.5rem;margin-top:4px;align-items:center;flex-wrap:wrap}
 .radio-row label{display:flex;align-items:center;gap:6px;font-size:14px;cursor:pointer;color:#1a1a1a}
 .radio-row input{accent-color:#30B2EE;width:16px;height:16px}
 .check-group{display:flex;flex-direction:column;gap:0}
-.check-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-bottom:0.5px solid #e8e8e8;font-size:14px;cursor:pointer;color:#1a1a1a}
+.check-item{display:flex;flex-direction:column;border-bottom:0.5px solid #e8e8e8;cursor:pointer}
 .check-item:first-child{border-top:0.5px solid #e8e8e8}
-.check-item input{accent-color:#30B2EE;width:15px;height:15px;flex-shrink:0}
+.check-item-row{display:flex;align-items:center;gap:10px;padding:9px 10px;font-size:14px;color:#1a1a1a}
+.check-item input[type=checkbox]{accent-color:#30B2EE;width:15px;height:15px;flex-shrink:0}
+.check-detail{display:none;padding:0 10px 10px 35px}
+.check-detail textarea{width:100%;padding:7px 9px;border:0.5px solid #ccc;border-radius:8px;font-size:13px;background:#fff;color:#1a1a1a;font-family:inherit;outline:none;resize:vertical;min-height:50px}
+.check-detail textarea:focus{border-color:#30B2EE;box-shadow:0 0 0 2px rgba(48,178,238,0.15)}
 .section-divider{height:0.5px;background:#e8e8e8;margin:1.5rem 0}
 .table-section{width:100%;border-collapse:collapse;margin-bottom:1rem;font-size:13px}
 .table-section th{text-align:left;padding:8px 10px;background:#f5f5f3;font-weight:500;font-size:12px;color:#888;border:0.5px solid #e0e0e0}
 .table-section td{padding:8px 10px;border:0.5px solid #e0e0e0;vertical-align:top;color:#1a1a1a}
 .table-section td:nth-child(2),.table-section td:nth-child(3){width:52px;text-align:center}
 .table-section td:nth-child(2) input,.table-section td:nth-child(3) input{accent-color:#30B2EE}
-.table-section .group-row td{background:#f5f5f3;font-weight:500;font-size:12px;color:#888;padding:6px 10px;letter-spacing:0.3px;text-transform:uppercase}
 .desc-input{width:100%;border:none;border-bottom:0.5px solid #ccc;background:transparent;font-size:12px;color:#1a1a1a;font-family:inherit;outline:none;padding:2px 0}
+.table-section .group-row td{background:#f5f5f3;font-weight:500;font-size:12px;color:#888;padding:6px 10px;letter-spacing:0.3px;text-transform:uppercase}
 .add-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;background:#30B2EE;color:white;font-size:13px;font-weight:500;border:none;cursor:pointer;margin-top:8px}
 .add-btn:hover{background:#1a9fd4}
 .btn-next{width:100%;padding:12px;background:#30B2EE;color:white;font-size:15px;font-weight:500;border:none;border-radius:6px;cursor:pointer;margin-top:1.5rem}
@@ -66,25 +70,29 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .btn-back{width:100%;padding:11px;background:#f0f0ee;color:#888;font-size:15px;font-weight:400;border:0.5px solid #ddd;border-radius:6px;cursor:pointer;margin-top:8px}
 .btn-back:hover{background:#e8e8e6}
 .required{color:#E85D3F;margin-left:1px}
-.field-note{font-size:12px;color:#888;margin-top:4px}
 .imm-badge{display:inline-block;background:#E1F5EE;color:#0F6E56;font-size:11px;font-weight:500;padding:2px 8px;border-radius:10px;margin-left:8px;vertical-align:middle}
-.consent-box{background:#f5f5f3;border:0.5px solid #ddd;border-radius:8px;padding:1rem;font-size:13px;color:#555;line-height:1.6;height:200px;overflow-y:auto;margin-bottom:1rem}
-.sig-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
-.finish-msg{text-align:center;padding:2rem 1rem}
-.finish-msg .check-circle{width:56px;height:56px;border-radius:50%;background:#E1F5EE;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem}
+.info-box{background:#E6F1FB;border:0.5px solid #B5D4F4;border-radius:8px;padding:12px 14px;font-size:13px;color:#185FA5;line-height:1.6;margin-bottom:1.25rem}
+.info-box strong{font-weight:500}
+.warn-box{background:#FAEEDA;border:0.5px solid #FAC775;border-radius:8px;padding:12px 14px;font-size:13px;color:#854F0B;line-height:1.6;margin-bottom:1.25rem}
+.warn-box strong{font-weight:500}
+.consent-box{background:#f5f5f3;border:0.5px solid #ddd;border-radius:8px;padding:1rem;font-size:13px;color:#555;line-height:1.6;height:220px;overflow-y:auto;margin-bottom:1rem}
+.consent-check-row{border:0.5px solid #ddd;border-radius:8px;padding:12px;gap:10px;display:flex;cursor:pointer;align-items:flex-start;margin-bottom:1rem}
+.consent-check-row input{accent-color:#30B2EE;width:16px;height:16px;flex-shrink:0;margin-top:2px}
+.conditional-block{display:none;background:#f9f9f7;border:0.5px solid #e0e0e0;border-radius:8px;padding:12px;margin-top:8px}
 .vaccine-row{border:0.5px solid #e8e8e8;border-radius:8px;padding:12px;margin-bottom:8px}
 .med-row{border:0.5px solid #e8e8e8;border-radius:8px;padding:12px;margin-bottom:8px}
 .inline-input{width:100%;padding:8px 10px;border:0.5px solid #ccc;border-radius:8px;font-size:14px;background:#fff;color:#1a1a1a;font-family:inherit;outline:none;margin-bottom:6px}
 .inline-input:focus{border-color:#30B2EE;box-shadow:0 0 0 2px rgba(48,178,238,0.15)}
-.consent-check-row{border:0.5px solid #ddd;border-radius:8px;padding:12px;gap:10px;display:flex;cursor:pointer;align-items:flex-start;margin-bottom:1rem}
-.consent-check-row input{accent-color:#30B2EE;width:16px;height:16px;flex-shrink:0;margin-top:2px}
+.finish-msg{text-align:center;padding:2rem 1rem}
+.finish-msg .check-circle{width:56px;height:56px;border-radius:50%;background:#E1F5EE;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem}
+.sig-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="ph-logo">Passport<span>Health</span></div>
   <div class="nav">
-    <span class="active" id="navLabel">Medical History</span>
+    <span class="active">Medical History</span>
     <span>Medical Records</span>
     <span>Invoices</span>
     <span>Travel Itineraries</span>
@@ -97,17 +105,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 <script>
 const STEPS = [
-  {key:'personal',   label:'Personal Info'},
-  {key:'medical',    label:'Medical History'},
+  {key:'personal',     label:'Personal Info'},
+  {key:'medical',      label:'Medical History'},
   {key:'communicable', label:'Communicable Diseases'},
-  {key:'mental',     label:'Mental & Substance'},
-  {key:'concerns',   label:'Other Concerns'},
-  {key:'allergies',  label:'Allergies'},
-  {key:'vaccines',   label:'Vaccine History'},
-  {key:'medications',label:'Medications'},
-  {key:'consent',    label:'Acknowledgement'},
+  {key:'mental',       label:'Mental & Substance'},
+  {key:'concerns',     label:'Other Concerns'},
+  {key:'allergies',    label:'Allergies'},
+  {key:'vaccines',     label:'Vaccine History'},
+  {key:'medications',  label:'Medications'},
+  {key:'consent',      label:'Acknowledgement'},
 ];
-
 let current = 0;
 
 function renderProgress() {
@@ -132,63 +139,55 @@ function renderProgress() {
 }
 
 function field(label, type, opts = {}) {
-  const req = opts.required ? `<span class="required">*</span>` : '';
-  const imm = opts.imm ? `<span class="imm-badge">immigration</span>` : '';
-  const note = opts.note ? `<div class="field-note">${opts.note}</div>` : '';
+  const req = opts.required ? '<span class="required">*</span>' : '';
+  const imm = opts.imm ? '<span class="imm-badge">immigration</span>' : '';
+  const note = opts.note ? '<div style="font-size:12px;color:#888;margin-top:4px">' + opts.note + '</div>' : '';
   let input = '';
   const uid = Math.random().toString(36).slice(2, 8);
   if (['text','email','tel','date'].includes(type)) {
-    input = `<input type="${type}" placeholder="${opts.placeholder || ''}">`;
+    input = '<input type="' + type + '" placeholder="' + (opts.placeholder || '') + '">';
   } else if (type === 'select') {
-    input = `<select><option value="">Select option</option>${(opts.options||[]).map(o=>`<option>${o}</option>`).join('')}</select>`;
+    input = '<select><option value="">Select option</option>' + (opts.options||[]).map(o=>'<option>'+o+'</option>').join('') + '</select>';
   } else if (type === 'textarea') {
-    input = `<textarea placeholder="${opts.placeholder || ''}"></textarea>`;
+    input = '<textarea placeholder="' + (opts.placeholder || '') + '"></textarea>';
   } else if (type === 'radio') {
     const options = opts.options || ['Yes','No'];
-    input = `<div class="radio-row">${options.map(o=>`<label><input type="radio" name="rg_${uid}"> ${o}</label>`).join('')}</div>`;
+    input = '<div class="radio-row">' + options.map(o=>'<label><input type="radio" name="rg_'+uid+'"> '+o+'</label>').join('') + '</div>';
   }
-  return `<div class="field${opts.cls?' '+opts.cls:''}"><label>${label}${req}${imm}</label>${input}${note}</div>`;
+  return '<div class="field' + (opts.cls?' '+opts.cls:'') + '"><label>' + label + req + imm + '</label>' + input + note + '</div>';
 }
 
-function checkList(items) {
-  return `<div class="check-group">${items.map(item => {
+function checkListWithDetail(items) {
+  return '<div class="check-group">' + items.map((item, idx) => {
     const label = item.label || item;
-    const imm = item.imm ? `<span class="imm-badge">immigration</span>` : '';
-    return `<label class="check-item"><input type="checkbox"> <span>${label}${imm}</span></label>`;
-  }).join('')}</div>`;
+    const imm = item.imm ? '<span class="imm-badge">immigration</span>' : '';
+    const uid = 'chk_' + Math.random().toString(36).slice(2,8);
+    return '<div class="check-item">' +
+      '<div class="check-item-row"><input type="checkbox" id="' + uid + '" onchange="toggleDetail(this)"> <span>' + label + imm + '</span></div>' +
+      '<div class="check-detail" id="detail_' + uid + '"><textarea placeholder="Please describe, including date(s)..."></textarea></div>' +
+      '</div>';
+  }).join('') + '</div>';
 }
 
 function tableYesNo(groups) {
   let rows = '';
   groups.forEach(g => {
-    rows += `<tr class="group-row"><td colspan="4">${g.group}</td></tr>`;
+    rows += '<tr class="group-row"><td colspan="4">' + g.group + '</td></tr>';
     g.items.forEach(item => {
       const uid = Math.random().toString(36).slice(2, 8);
-      rows += `<tr>
-        <td>${item}</td>
-        <td><input type="radio" name="yn_${uid}"></td>
-        <td><input type="radio" name="yn_${uid}"></td>
-        <td><input class="desc-input" type="text" placeholder="If yes, describe..."></td>
-      </tr>`;
+      rows += '<tr><td>' + item + '</td><td><input type="radio" name="yn_'+uid+'"></td><td><input type="radio" name="yn_'+uid+'"></td><td><input class="desc-input" type="text" placeholder="If yes, describe..."></td></tr>';
     });
   });
-  return `<table class="table-section">
-    <thead><tr>
-      <th style="width:50%">Question</th>
-      <th>Yes</th><th>No</th>
-      <th>Description / Date</th>
-    </tr></thead>
-    <tbody>${rows}</tbody>
-  </table>`;
+  return '<table class="table-section"><thead><tr><th style="width:50%">Question</th><th>Yes</th><th>No</th><th>Description / Date</th></tr></thead><tbody>' + rows + '</tbody></table>';
 }
 
 function navBtns(showBack, nextLabel) {
-  const back = showBack ? `<button class="btn-back" onclick="go(-1)">Back</button>` : '';
-  return `<button class="btn-next" onclick="go(1)">${nextLabel || 'Next'}</button>${back}`;
+  const back = showBack ? '<button class="btn-back" onclick="go(-1)">Back</button>' : '';
+  return '<button class="btn-next" onclick="go(1)">' + (nextLabel||'Next') + '</button>' + back;
 }
 
 const stateList = ['AK','AL','AR','AZ','CA','CO','CT','DC','DE','FL','GA','HI','IA','ID','IL','IN','KS','KY','LA','MA','MD','ME','MI','MN','MO','MS','MT','NC','ND','NE','NH','NJ','NM','NV','NY','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VA','VT','WA','WI','WV','WY'];
-const vaccineList = ['COVID-19','Flu (Influenza)','Hepatitis A','Hepatitis B','HPV','MMR','Meningococcal','Pneumococcal','Polio','Shingles (Zoster)','Td/Tdap','Typhoid','Varicella (Chickenpox)','Yellow Fever','Other'];
+const vaccineOpts = ['COVID-19','Flu (Influenza)','Hepatitis A','Hepatitis B','HPV','MMR','Meningococcal','Pneumococcal','Polio','Shingles (Zoster)','Td/Tdap','Typhoid','Varicella (Chickenpox)','Yellow Fever','Other'];
 
 const pages = {
 
@@ -198,6 +197,10 @@ personal: () => `
   <div class="row2">
     ${field('Date of Birth','date',{required:true})}
     ${field('Age','text',{required:true})}
+  </div>
+  <div class="row2">
+    ${field('Country of Birth','text',{required:true,imm:true})}
+    ${field('Date Arrived in US','date',{required:true,imm:true})}
   </div>
   ${field('Email Address','email',{required:true})}
   <div class="row2">
@@ -213,17 +216,39 @@ personal: () => `
     ${field('Postal Code','text',{required:true})}
   </div>
   <div class="row2">
+    ${field('Height','text',{required:true,placeholder:'e.g. 5\'10"'})}
     ${field('Weight (lbs)','text',{required:true})}
-    ${field('Gender','select',{required:true,options:['Female','Male','Non-binary','Prefer not to say']})}
   </div>
+  ${field('Gender','select',{required:true,options:['Female','Male','Non-binary','Prefer not to say']})}
   <div class="row2">
     ${field('Ethnicity','select',{required:true,options:['Hispanic or Latino','Not Hispanic or Latino']})}
     ${field('Race','select',{required:true,options:['American Indian/Alaska Native','Asian','Black/African American','Native Hawaiian/Pacific Islander','White','Two or more races','Unknown']})}
   </div>
   <div class="section-divider"></div>
-  <div class="section-title">ID &amp; Immigration Info <span class="imm-badge">immigration</span></div>
-  ${field('Passport / Driver\'s License / EAD / State ID #','text',{required:true,placeholder:'Document number'})}
-  ${field('Date of appointment with Civil Surgeon','date',{required:true})}
+  <div class="section-title">Government-Issued Photo ID <span class="imm-badge">immigration</span></div>
+  ${field('What government issued photo ID will you bring to your appointment?','select',{required:true,options:['Passport','Driver\'s license','Employment authorization card','State ID','Other']})}
+  <div class="row2">
+    ${field('ID Number','text',{required:true,placeholder:'Document number'})}
+    ${field('ID Expiration Date','date',{required:true,note:'ID must be unexpired'})}
+  </div>
+  <div class="section-divider"></div>
+  <div class="section-title">Language & Interpreter <span class="imm-badge">immigration</span></div>
+  <div class="field">
+    <label>Can you read, speak, and understand English proficiently? <span class="required">*</span></label>
+    <div class="radio-row">
+      <label><input type="radio" name="rg_english" onchange="toggleEnglish(this,'yes')"> Yes</label>
+      <label><input type="radio" name="rg_english" onchange="toggleEnglish(this,'no')"> No</label>
+    </div>
+  </div>
+  <div class="conditional-block" id="interpreterBlock">
+    <div class="warn-box"><strong>Important:</strong> If you cannot read, speak, and understand English proficiently, you must bring a qualified interpreter with you to your appointment.</div>
+    ${field('Interpreter First Name','text',{required:false})}
+    ${field('Interpreter Last Name','text',{required:false})}
+    ${field('Interpreter Language','text',{required:false,placeholder:'e.g. Spanish, Mandarin'})}
+  </div>
+  <div class="section-divider"></div>
+  <div class="section-title">Immigration Attorney</div>
+  ${field('Name of Immigration Attorney','text',{imm:true,placeholder:'Optional'})}
   <div class="section-divider"></div>
   <div class="section-title">Emergency Contact</div>
   ${field('Emergency Contact Name','text',{required:true})}
@@ -239,10 +264,10 @@ personal: () => `
 
 medical: () => `
   <div class="section-title">Medical History</div>
-  <p style="font-size:13px;color:#666;margin-bottom:1rem">Select the conditions for which you have been treated</p>
-  ${checkList([
+  <p style="font-size:13px;color:#666;margin-bottom:1rem">Select the conditions for which you have been treated. If you check any condition, a text box will appear — please describe including date(s).</p>
+  ${checkListWithDetail([
     {label:'Thyroid Disease'},
-    {label:'Cancer (if yes, specify type below)'},
+    {label:'Cancer (if yes, specify type)'},
     {label:'Atherosclerosis / High Cholesterol'},
     {label:'HIV/AIDS'},
     {label:'Psychiatric Conditions'},
@@ -250,7 +275,7 @@ medical: () => `
   ])}
   <div class="section-divider"></div>
   <p style="font-size:13px;color:#666;margin-bottom:1rem">Select any additional conditions for which you are being treated</p>
-  ${checkList([
+  ${checkListWithDetail([
     {label:'Acid Reflux'},
     {label:'Anxiety / Depression'},
     {label:'Asthma or shortness of breath'},
@@ -270,7 +295,6 @@ medical: () => `
     {label:'Rheumatoid arthritis'},
     {label:'Tuberculosis'},
     {label:'Eczema, psoriasis, or other chronic dermatitis'},
-    {label:'Chickenpox (varicella)', imm:true},
     {label:'Guillain-Barré syndrome or paralysis history'},
     {label:'Other'},
   ])}
@@ -358,7 +382,7 @@ mental: () => `
 
 concerns: () => `
   <div class="section-title">Other Medical Concerns</div>
-  ${checkList([
+  ${checkListWithDetail([
     {label:'Have you ever had a positive TB skin test?'},
     {label:'Do you have heart problems or cardiac arrhythmia or irregularity?'},
     {label:'Do you have bleeding problems, take anticoagulants, aspirin or aspirin therapy?'},
@@ -379,7 +403,7 @@ concerns: () => `
 allergies: () => `
   <div class="section-title">Allergies</div>
   <p style="font-size:13px;color:#666;margin-bottom:1rem">Are you allergic to:</p>
-  ${checkList(['Gelatin','Eggs','Feathers','Formaldehyde','Insect/Bee stings','Latex','Mercury','Quinine','Thimerosal','Yeast','Other'])}
+  ${checkListWithDetail(['Gelatin','Eggs','Feathers','Formaldehyde','Insect/Bee stings','Latex','Mercury','Quinine','Thimerosal','Yeast','Other'])}
   <div class="section-divider"></div>
   ${field('Do you have any known drug allergies?','radio',{required:true})}
   <div class="field">
@@ -394,19 +418,14 @@ allergies: () => `
 
 vaccines: () => `
   <div class="section-title">Vaccine History</div>
-  <p style="font-size:13px;color:#666;margin-bottom:4px">Which vaccines have you received in the past? List all doses and bring records to your appointment.</p>
+  <div class="info-box"><strong>Immigration clients:</strong> Only enter vaccine doses you have official documentation for. Bring all vaccination records with you to your appointment. If your records are not in English, they <strong>must</strong> be officially translated before your visit.</div>
+  <p style="font-size:13px;color:#666;margin-bottom:4px">Which vaccines have you received in the past? List all doses.</p>
   <p style="font-size:13px;color:#666;margin-bottom:1rem">If the month of administration is unknown, please use January.</p>
   <div id="vaccineList">
     <div class="vaccine-row">
       <div class="row2">
-        <div class="field" style="margin:0">
-          <label>Vaccine</label>
-          <select><option value="">Select vaccine</option>${vaccineList.map(v=>`<option>${v}</option>`).join('')}</select>
-        </div>
-        <div class="field" style="margin:0">
-          <label>Date received</label>
-          <input type="date">
-        </div>
+        <div class="field" style="margin:0"><label>Vaccine</label><select><option value="">Select vaccine</option>${vaccineOpts.map(v=>'<option>'+v+'</option>').join('')}</select></div>
+        <div class="field" style="margin:0"><label>Date received</label><input type="date"></div>
       </div>
     </div>
   </div>
@@ -431,10 +450,7 @@ medications: () => `
   </div>
   <button class="add-btn" onclick="addMed()">+ Add Medication</button>
   <div class="section-divider"></div>
-  <div class="field">
-    <label>Any additional information to add? <span class="imm-badge">immigration</span></label>
-    <textarea placeholder="Additional notes or health information..."></textarea>
-  </div>
+  <div class="field"><label>Any additional information to add? <span class="imm-badge">immigration</span></label><textarea placeholder="Additional notes or health information..."></textarea></div>
   ${navBtns(true,'Next')}
 `,
 
@@ -444,11 +460,13 @@ consent: () => `
     <p style="margin-bottom:0.75rem">The above information is accurate and complete, to my best recollection. Any additional information I have provided, including but not limited to medical history, family history and personal information on other forms pertaining to my visit is also accurate and complete to my best recollection.</p>
     <p style="margin-bottom:0.75rem">I understand that Passport Health is not a Medicare provider and Passport Health does no insurance billing or filing of forms. I understand that insurance may not cover the services I have received as a part of my appointment. I am responsible for all applicable office visit, immunization, laboratory, physical and diagnostic fees associated with this visit.</p>
     <p style="margin-bottom:0.75rem">I understand that my appointment will include a screening conducted by a Passport Health clinician. This screening is not intended and should not be used, to replace periodic, thorough health and medical evaluation by and communication with a primary care physician.</p>
-    <p style="font-weight:500;margin-bottom:0.75rem">I attest all the above information is true and complete to my best knowledge. I understand if I knowingly withhold information, this may result in denial or revocation of any immigration benefit.</p>
+    <p style="margin-bottom:0.75rem;font-weight:500">I-693 Exam Consent</p>
+    <p style="margin-bottom:0.75rem">I consent to all required testing dictated by USCIS to complete the I-693 exam, which may include blood collection. I understand any procedure is done with my consent and is completely voluntary. Certain risks, complications, and discomforts may result from the procedure(s). These include, but are not limited to: bleeding; infection; bruising; swelling; scarring; allergic reaction; damage to an underlying nerve, vein, artery, muscle, or tendon. Some people may experience lightheadedness or fainting when they have blood drawn.</p>
+    <p style="font-weight:500">I attest all the above information is true and complete to my best knowledge. I understand if I knowingly withhold information, this may result in denial or revocation of any immigration benefit.</p>
   </div>
   <label class="consent-check-row">
     <input type="checkbox">
-    <span style="font-size:14px;color:#1a1a1a">By checking this box, I acknowledge and agree to the foregoing and consent to the use of electronic signatures. <span class="required">*</span></span>
+    <span style="font-size:14px;color:#1a1a1a">By checking this box, I acknowledge and agree to the foregoing, including the I-693 exam consent, and consent to the use of electronic signatures. <span class="required">*</span></span>
   </label>
   <div class="section-divider"></div>
   <p style="font-size:13px;color:#666;margin-bottom:8px">Patient Signature (or Parent / Guardian if patient is a minor)</p>
@@ -489,25 +507,24 @@ function finish() {
       </div>
       <p style="font-size:17px;font-weight:500;margin-bottom:0.5rem">Intake complete</p>
       <p style="font-size:14px;color:#666">Your health history has been submitted. Please bring your vaccine records to your appointment.</p>
-    </div>
-  `;
+    </div>`;
+}
+
+function toggleDetail(checkbox) {
+  const detail = document.getElementById('detail_' + checkbox.id);
+  if (detail) detail.style.display = checkbox.checked ? 'block' : 'none';
+}
+
+function toggleEnglish(radio, val) {
+  const block = document.getElementById('interpreterBlock');
+  if (block) block.style.display = val === 'no' ? 'block' : 'none';
 }
 
 function addVaccine() {
   const list = document.getElementById('vaccineList');
   const div = document.createElement('div');
   div.className = 'vaccine-row';
-  div.innerHTML = `
-    <div class="row2">
-      <div class="field" style="margin:0">
-        <label>Vaccine</label>
-        <select><option value="">Select vaccine</option>${vaccineList.map(v=>`<option>${v}</option>`).join('')}</select>
-      </div>
-      <div class="field" style="margin:0">
-        <label>Date received</label>
-        <input type="date">
-      </div>
-    </div>`;
+  div.innerHTML = '<div class="row2"><div class="field" style="margin:0"><label>Vaccine</label><select><option value="">Select vaccine</option>' + vaccineOpts.map(v=>'<option>'+v+'</option>').join('') + '</select></div><div class="field" style="margin:0"><label>Date received</label><input type="date"></div></div>';
   list.appendChild(div);
 }
 
@@ -515,12 +532,7 @@ function addMed() {
   const list = document.getElementById('medList');
   const div = document.createElement('div');
   div.className = 'med-row';
-  div.innerHTML = `
-    <div class="field" style="margin-bottom:8px"><label>Medication</label><input type="text" placeholder="Search medication"></div>
-    <div class="row2">
-      <div class="field" style="margin:0"><label>Dose</label><input type="text"></div>
-      <div class="field" style="margin:0"><label>Frequency</label><input type="text"></div>
-    </div>`;
+  div.innerHTML = '<div class="field" style="margin-bottom:8px"><label>Medication</label><input type="text" placeholder="Search medication"></div><div class="row2"><div class="field" style="margin:0"><label>Dose</label><input type="text"></div><div class="field" style="margin:0"><label>Frequency</label><input type="text"></div></div>';
   list.appendChild(div);
 }
 
