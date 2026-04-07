@@ -140,7 +140,7 @@ function renderProgress() {
 
 function field(label, type, opts = {}) {
   const req = opts.required ? '<span class="required">*</span>' : '';
-  const imm = opts.imm ? '<span class="imm-badge">immigration</span>' : '';
+  const imm = opts.imm ? '<span class="imm-badge">IMMIGRATION</span>' : '';
   const note = opts.note ? '<div style="font-size:12px;color:#888;margin-top:4px">' + opts.note + '</div>' : '';
   let input = '';
   const uid = Math.random().toString(36).slice(2, 8);
@@ -216,10 +216,11 @@ personal: () => `
     ${field('Postal Code','text',{required:true})}
   </div>
   <div class="row2">
-    ${field('Height','text',{required:true,placeholder:'e.g. 5\'10"'})}
-    ${field('Weight (lbs)','text',{required:true})}
+    ${field('Height','text',{placeholder:'e.g. 5\'10"'})}
+    ${field('Weight (lbs)','text')}
   </div>
   ${field('Gender','select',{required:true,options:['Female','Male','Non-binary','Prefer not to say']})}
+  ${field('Occupation','text',{required:false})}
   <div class="row2">
     ${field('Ethnicity','select',{required:true,options:['Hispanic or Latino','Not Hispanic or Latino']})}
     ${field('Race','select',{required:true,options:['American Indian/Alaska Native','Asian','Black/African American','Native Hawaiian/Pacific Islander','White','Two or more races','Unknown']})}
@@ -228,8 +229,8 @@ personal: () => `
   <div class="section-title">Government-Issued Photo ID <span class="imm-badge">immigration</span></div>
   ${field('What government issued photo ID will you bring to your appointment?','select',{required:true,options:['Passport','Driver\'s license','Employment authorization card','State ID','Other']})}
   <div class="row2">
-    ${field('ID Number','text',{required:true,placeholder:'Document number'})}
-    ${field('ID Expiration Date','date',{required:true,note:'ID must be unexpired'})}
+    ${field('ID Number','text',{placeholder:'Document number'})}
+    ${field('ID Expiration Date','date',{note:'ID must be unexpired'})}
   </div>
   <div class="section-divider"></div>
   <div class="section-title">Language & Interpreter <span class="imm-badge">immigration</span></div>
@@ -247,18 +248,13 @@ personal: () => `
     ${field('Interpreter Language','text',{required:false,placeholder:'e.g. Spanish, Mandarin'})}
   </div>
   <div class="section-divider"></div>
-  <div class="section-title">Immigration Attorney</div>
-  ${field('Name of Immigration Attorney','text',{imm:true,placeholder:'Optional'})}
+  <div class="section-title">Immigration Attorney <span class="imm-badge">immigration</span></div>
+  ${field('Name of Immigration Attorney','text')}
   <div class="section-divider"></div>
   <div class="section-title">Emergency Contact</div>
   ${field('Emergency Contact Name','text',{required:true})}
   ${field('Relationship','text')}
   ${field('Emergency Contact Phone','tel',{required:true})}
-  <div class="section-divider"></div>
-  <div class="section-title">RX Information</div>
-  ${field('Do you have a preferred pharmacy?','radio')}
-  ${field('Have you been to a Passport Health clinic before?','radio')}
-  ${field('Were you referred by your employer?','radio',{required:true})}
   ${navBtns(false,'Next')}
 `,
 
@@ -307,6 +303,12 @@ medical: () => `
   <div class="section-title">Medical &amp; Surgical History <span class="imm-badge">immigration</span></div>
   <div class="field">
     <label>Currently being treated for other conditions?</label>
+    <div class="radio-row">
+      <label><input type="radio" name="rg_othercond" onchange="document.getElementById('otherCondBlock').style.display='block'"> Yes</label>
+      <label><input type="radio" name="rg_othercond" onchange="document.getElementById('otherCondBlock').style.display='none'"> No</label>
+    </div>
+  </div>
+  <div class="conditional-block" id="otherCondBlock">
     <input class="inline-input" type="text" placeholder="Condition 1">
     <input class="inline-input" type="text" placeholder="Condition 2">
     <input class="inline-input" type="text" placeholder="Condition 3" style="margin-bottom:0">
@@ -325,11 +327,10 @@ communicable: () => `
   <p style="font-size:13px;color:#666;margin-bottom:1rem">Answer yes or no. If yes, describe including date occurred.</p>
   ${tableYesNo([
     {group:'Tuberculosis Symptoms Assessment', items:[
-      'Do you have Tuberculosis?',
       'Ever been diagnosed or treated for Tuberculosis?',
       'Any recent contact with someone with Tuberculosis?',
       'Productive cough for 3 weeks or more, or coughing up blood?',
-      'Night sweats?',
+      'Night sweats or fevers?',
       'Loss of appetite or unexplained weight loss?',
     ]},
     {group:'Syphilis &amp; Gonorrhea Assessment', items:[
@@ -382,20 +383,23 @@ mental: () => `
 
 concerns: () => `
   <div class="section-title">Other Medical Concerns</div>
-  ${checkListWithDetail([
-    {label:'Have you ever had a positive TB skin test?'},
-    {label:'Do you have heart problems or cardiac arrhythmia or irregularity?'},
-    {label:'Do you have bleeding problems, take anticoagulants, aspirin or aspirin therapy?'},
-    {label:'Are you currently experiencing any respiratory infections or other acute illness?'},
-    {label:'Do you experience nightmares or insomnia?'},
-    {label:'Do you have stomach/bowel conditions such as frequent diarrhea or constipation?'},
-    {label:'Have you been diagnosed with sleep apnea?'},
-    {label:'Are you receiving steroid medications such as cortisone or prednisone?'},
-    {label:'Do you have a previous history of tendonitis/tendon rupture?'},
-    {label:'Are you receiving radiation or other treatments?'},
-    {label:'Do you have a history of fainting with shots?'},
-    {label:'Do you have any history of motion sickness?'},
-    {label:'Are you caring for anyone who is immunocompromised?'},
+  <p style="font-size:13px;color:#666;margin-bottom:1rem">Answer yes or no. If yes, describe including date occurred.</p>
+  ${tableYesNo([
+    {group:'General Health Concerns', items:[
+      'Have you ever had a positive TB skin test?',
+      'Do you have heart problems or cardiac arrhythmia or irregularity?',
+      'Do you have bleeding problems, take anticoagulants, aspirin or aspirin therapy?',
+      'Are you currently experiencing any respiratory infections or other acute illness?',
+      'Do you experience nightmares or insomnia?',
+      'Do you have stomach/bowel conditions such as frequent diarrhea or constipation?',
+      'Have you been diagnosed with sleep apnea?',
+      'Are you receiving steroid medications such as cortisone or prednisone?',
+      'Do you have a previous history of tendonitis/tendon rupture?',
+      'Are you receiving radiation or other treatments?',
+      'Do you have a history of fainting with shots?',
+      'Do you have any history of motion sickness?',
+      'Are you caring for anyone who is immunocompromised?',
+    ]},
   ])}
   ${navBtns(true,'Next')}
 `,
@@ -462,6 +466,11 @@ consent: () => `
     <p style="margin-bottom:0.75rem">I understand that my appointment will include a screening conducted by a Passport Health clinician. This screening is not intended and should not be used, to replace periodic, thorough health and medical evaluation by and communication with a primary care physician.</p>
     <p style="margin-bottom:0.75rem;font-weight:500">I-693 Exam Consent</p>
     <p style="margin-bottom:0.75rem">I consent to all required testing dictated by USCIS to complete the I-693 exam, which may include blood collection. I understand any procedure is done with my consent and is completely voluntary. Certain risks, complications, and discomforts may result from the procedure(s). These include, but are not limited to: bleeding; infection; bruising; swelling; scarring; allergic reaction; damage to an underlying nerve, vein, artery, muscle, or tendon. Some people may experience lightheadedness or fainting when they have blood drawn.</p>
+    <p style="margin-bottom:0.75rem;font-weight:500">I-693 Immigration Process &amp; Associated Policies</p>
+    <p style="margin-bottom:0.75rem">I understand that there will be a <strong>$150 document verification and processing fee</strong> for all clients who submit additional vaccine records, medical records, or require review of additional follow-up testing after the initial visit.</p>
+    <p style="margin-bottom:0.75rem">I acknowledge that abnormal test results may require additional follow-up testing or referral to a specialist, which may result in additional out-of-pocket costs for those services. I understand that the completion of the I-693 form may be delayed if further testing or referrals are necessary. I understand that <strong>Passport Health is not a Medicare or Medicaid provider</strong>, is <strong>not affiliated with any insurance networks</strong>, and <strong>does not accept or bill insurance</strong>. I am solely responsible for all costs related to this visit. <strong>All fees must be paid in full before any documents are released</strong>, and <strong>all services are non-refundable</strong>.</p>
+    <p style="margin-bottom:0.75rem">I understand that a <strong>second visit is required</strong> to complete my exam. During this visit, I will receive the sealed original I-693 and my personal copy if all outstanding requirements have been met. <strong>I am responsible for verifying the accuracy of all information in the sealed packet before leaving the appointment.</strong></p>
+    <p style="margin-bottom:0.75rem">A <strong>non-refundable $100.00 fee</strong> will be charged for <strong>any missed Civil Surgeon appointments</strong>.</p>
     <p style="font-weight:500">I attest all the above information is true and complete to my best knowledge. I understand if I knowingly withhold information, this may result in denial or revocation of any immigration benefit.</p>
   </div>
   <label class="consent-check-row">
